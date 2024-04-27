@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Product} from "../model/product.model";
 import {AsyncPipe, NgForOf} from "@angular/common";
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {map, Observable} from "rxjs";
 import {ProductService} from "../services/product.service";
 @Component({
   selector: 'app-products',
@@ -30,8 +30,20 @@ export class ProductsComponent implements OnInit {
   onCheckChange($event: Event, product: Product) {
     this.productsService.checkProduct(product).subscribe({
         next :(updatedProduct : Product) => {
-           product.checked = updatedProduct.checked;
+           product.checked = !updatedProduct.checked;
         }
       })
+  }
+
+  deleteProduct(id: number) {
+    this.productsService.deleteProduct({id} as Product).subscribe(
+      () => {
+        // filter out the deleted product
+        this.products$ = this.products$.pipe(
+          map((products: Product[]) => products.filter(product => product.id !== id))
+        )
+      }
+    )
+
   }
 }
