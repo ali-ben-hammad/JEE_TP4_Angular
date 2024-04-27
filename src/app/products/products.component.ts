@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Product} from "../model/product.model";
 import {NgForOf} from "@angular/common";
 import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
+import {ProductService} from "../services/product.service";
 @Component({
   selector: 'app-products',
   standalone: true,
@@ -12,30 +14,24 @@ import {HttpClient} from "@angular/common/http";
   styleUrl: './products.component.css',
 })
 export class ProductsComponent implements OnInit {
-  constructor(private http: HttpClient) {
+  constructor(private productsService: ProductService) {
   }
 
   products: Array<Product> = [];
 
   ngOnInit(): void {
-    this.http.get<Array<Product>>('http://localhost:8089/products')
-      .subscribe(
-        data => {
-          this.products = data;
-        });
+    this.productsService.getProducts().subscribe({
+      next: (products : Array<Product> ) => {
+        this.products = products;
+      }
+    });
   }
 
-
   onCheckChange($event: Event, product: Product) {
-    product.checked = !product.checked;
-   this.http.patch(`http://localhost:8089/products/${product.id}`,
-     {checked: product.checked}).subscribe({
-      next : updatedProduct => {
-        this.products.map(p => p.id === product.id ? updatedProduct : p)
-      },
-     }
-
-   );
-
+    this.productsService.checkProduct(product).subscribe({
+        next :(updatedProduct : Product) => {
+           product.checked = updatedProduct.checked;
+        }
+      })
   }
 }

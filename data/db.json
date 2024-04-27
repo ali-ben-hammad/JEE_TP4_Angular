@@ -4,19 +4,19 @@
       "id": "1",
       "name": "Product 1",
       "price": 100,
-      "checked": true
+      "checked": false
     },
     {
       "id": "2",
       "name": "Product 2",
       "price": 200,
-      "checked": false
+      "checked": true
     },
     {
       "id": "3",
       "name": "Product 3",
       "price": 300,
-      "checked": false
+      "checked": true
     },
     {
       "id": "4",
