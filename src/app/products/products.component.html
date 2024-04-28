@@ -3,31 +3,44 @@
     <div class="card-header">
       <h4 class="card-title">Products</h4>
     </div>
-   <div class="card-body">
-     <table class="table">
-       <thead>
+    <div class="card-body">
+      <div class="card-body">
+        {{keyword}}
+        <div class="form-group col-md-6">
+          <input class="p-1" type="text" [(ngModel)]="keyword">
+          <button class="btn btn-outline-success ms-1"
+          (click)="searchProducts(keyword)">
+            <i class="bi bi-search"></i>
+            Search
+          </button>
+        </div>
+
+
+      </div>
+      <table class="table">
+        <thead>
         <tr>
           <th>Name</th>
           <th>Price</th>
           <th>Checked
           </th>
         </tr>
-       </thead>
-       <tbody>
+        </thead>
+        <tbody>
         <tr *ngFor="let product of products$ | async">
-          <td>{{product.name}}</td>
-          <td>{{product.price}}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.price }}</td>
           <td>
             <input class="form-check-input" type="checkbox"
-            [checked]="product.checked"
+                   [checked]="product.checked"
                    (change)="onCheckChange($event, product)">
           </td>
-       <td>
-         <button class="btn btn-danger" (click)="deleteProduct(product.id)">
-           <i class="bi bi-trash"></i>
-         </button>
-       </tbody>
-     </table>
-   </div>
+          <td>
+            <button class="btn btn-danger" (click)="deleteProduct(product.id)">
+              <i class="bi bi-trash"></i>
+            </button>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

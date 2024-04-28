@@ -4,12 +4,14 @@ import {AsyncPipe, NgForOf} from "@angular/common";
 import {HttpClient} from "@angular/common/http";
 import {map, Observable} from "rxjs";
 import {ProductService} from "../services/product.service";
+import {FormsModule} from "@angular/forms";
 @Component({
   selector: 'app-products',
   standalone: true,
   imports: [
     NgForOf,
     AsyncPipe,
+    FormsModule,
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css',
@@ -18,7 +20,8 @@ export class ProductsComponent implements OnInit {
   constructor(private productsService: ProductService) {
   }
 
-  products$!: Observable<Array<Product>> ;
+  public products$!: Observable<Array<Product>> ;
+  public keyword: string = '';
 
   ngOnInit(): void {
     this.getProducts()
@@ -45,5 +48,10 @@ export class ProductsComponent implements OnInit {
       }
     )
 
+  }
+
+  searchProducts(keyword: string) {
+    this.products$ =  this.productsService.searchProducts(keyword)
+    console.log(this.products$)
   }
 }
