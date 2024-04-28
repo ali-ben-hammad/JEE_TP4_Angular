@@ -21,7 +21,7 @@ export class AppComponent {
   actions: Array<any> = [
     {name: 'Home', path: 'home', icon: 'bi-house'},
     {name: 'Products', path: 'products', icon: 'bi-cart'},
-    {name: 'Product', path: 'product', icon: 'bi-plus'},
+    {name: 'New Product', path: 'product', icon: 'bi-plus'},
   ];
 
 }

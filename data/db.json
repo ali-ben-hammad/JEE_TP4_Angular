@@ -59,6 +59,30 @@
       "name": "Product 10",
       "price": 1000,
       "checked": false
+    },
+    {
+      "id": "beee",
+      "name": "az",
+      "price": "34",
+      "checked": true
+    },
+    {
+      "id": "eb4a",
+      "name": "erzerze",
+      "price": "4544",
+      "checked": true
+    },
+    {
+      "id": "cc67",
+      "name": "erzerze",
+      "price": "4544",
+      "checked": true
+    },
+    {
+      "id": "dcde",
+      "name": "erzerze",
+      "price": "4544",
+      "checked": true
     }
   ]
 }
