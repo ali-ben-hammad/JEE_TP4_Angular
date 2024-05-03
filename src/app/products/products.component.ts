@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Product} from "../model/product.model";
 import {AsyncPipe, NgForOf} from "@angular/common";
-import {HttpClient} from "@angular/common/http";
-import {map, Observable} from "rxjs";
 import {ProductService} from "../services/product.service";
 import {FormsModule} from "@angular/forms";
 @Component({
@@ -20,14 +18,30 @@ export class ProductsComponent implements OnInit {
   constructor(private productsService: ProductService) {
   }
 
-  public products$!: Observable<Array<Product>> ;
+  public products: Array<Product> = [];
   public keyword: string = '';
+  totalPages: number = 0;
+  currentPage: number = 0;
+  pages : number[] = new Array(this.totalPages);
+  pageSize: number = 3;
 
   ngOnInit(): void {
+    this.totalPages = 1;
     this.getProducts()
   }
    getProducts() {
-    this.products$ = this.productsService.getProducts();
+    this.productsService.getProducts(this.currentPage, this.pageSize, this.keyword).subscribe(
+      response => {
+        this.products = response.body as Product[];
+        let totalProducts : number = parseInt(response.headers.get('X-Total-Count')!);
+        console.log("totalProducts", totalProducts);
+        this.totalPages = Math.ceil(totalProducts / this.pageSize);
+        console.log("totalPages", this.totalPages);
+       if (this.totalPages === 0) {
+          this.totalPages = 1;
+        }
+      }
+    )
    }
 
   onCheckChange($event: Event, product: Product) {
@@ -42,16 +56,23 @@ export class ProductsComponent implements OnInit {
     this.productsService.deleteProduct({id} as Product).subscribe(
       () => {
         // filter out the deleted product
-        this.products$ = this.products$.pipe(
-          map((products: Product[]) => products.filter(product => product.id !== id))
-        )
+ this.products = this.products.filter(product => product.id !== id);
       }
     )
 
   }
 
-  searchProducts(keyword: string) {
-    this.products$ =  this.productsService.searchProducts(keyword)
-    console.log(this.products$)
+
+  searchProducts(){
+    //console.log(page , size);
+   this.getProducts();
   }
+
+
+  changePage(page: any) {
+    this.currentPage = page;
+    this.getProducts();
+  }
+
+  protected readonly Array = Array;
 }

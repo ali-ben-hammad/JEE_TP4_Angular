@@ -5,17 +5,15 @@
     </div>
     <div class="card-body">
       <div class="card-body">
-        {{keyword}}
+        {{ keyword }}
         <div class="form-group col-md-6">
           <input class="p-1" type="text" [(ngModel)]="keyword">
           <button class="btn btn-outline-success ms-1"
-          (click)="searchProducts(keyword)">
+                  (click)="searchProducts()">
             <i class="bi bi-search"></i>
             Search
           </button>
         </div>
-
-
       </div>
       <table class="table">
         <thead>
@@ -27,7 +25,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let product of products$ | async">
+        <tr *ngFor="let product of products">
           <td>{{ product.name }}</td>
           <td>{{ product.price }}</td>
           <td>
@@ -41,6 +39,16 @@
             </button>
         </tbody>
       </table>
+     <ul class="nav nav-pills">
+      <li *ngFor="let page of pages"
+           class="nav-item">
+         <button class="nav-link"
+            [class.active]="currentPage === page"
+            (click)="changePage(page)">
+           {{ page + 1 }}
+         </button>
+      </li>
+     </ul>
     </div>
   </div>
 </div>
