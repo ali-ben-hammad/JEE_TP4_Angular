@@ -15,29 +15,30 @@ import {normalizeExtraEntryPoints} from "@angular-devkit/build-angular/src/tools
   templateUrl: './product.component.html',
   styleUrl: './product.component.css'
 })
-export class ProductComponent implements OnInit{
-  public productFrom! : FormGroup;
+export class ProductComponent implements OnInit {
+  public productFrom!: FormGroup;
 
-  constructor(private fb: FormBuilder,private productService:ProductService) {
+  constructor(private fb: FormBuilder, private productService: ProductService) {
   }
 
   ngOnInit(): void {
     this.productFrom = this.fb.group({
-      name : this.fb.control('', Validators.required),
-      price : this.fb.control(0, Validators.required),
-      checked : this.fb.control(false)
+      name: this.fb.control('', Validators.required),
+      price: this.fb.control(0, Validators.required),
+      checked: this.fb.control(false)
     })
 
   }
 
 
   saveProduct() {
-    let product:Product = this.productFrom.value;
+    let product: Product = this.productFrom.value;
     this.productService.createProduct(product).subscribe(
       {
         next: (data: Product) => {
           alert(JSON.stringify(data));
         }
       }
-    )}
+    )
+  }
 }

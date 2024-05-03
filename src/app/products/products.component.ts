@@ -3,6 +3,8 @@ import {Product} from "../model/product.model";
 import {AsyncPipe, NgForOf} from "@angular/common";
 import {ProductService} from "../services/product.service";
 import {FormsModule} from "@angular/forms";
+import {Route} from "@angular/router";
+import {Router} from "@angular/router";
 @Component({
   selector: 'app-products',
   standalone: true,
@@ -15,57 +17,61 @@ import {FormsModule} from "@angular/forms";
   styleUrl: './products.component.css',
 })
 export class ProductsComponent implements OnInit {
-  constructor(private productsService: ProductService) {
+  constructor(
+      private productsService: ProductService,
+      private router: Router
+    ) {
   }
 
   public products: Array<Product> = [];
   public keyword: string = '';
   totalPages: number = 0;
   currentPage: number = 0;
-  pages : number[] = new Array(this.totalPages);
+  pages: number[] = new Array(this.totalPages);
   pageSize: number = 3;
 
   ngOnInit(): void {
     this.totalPages = 1;
     this.getProducts()
   }
-   getProducts() {
+
+  getProducts() {
     this.productsService.getProducts(this.currentPage, this.pageSize, this.keyword).subscribe(
       response => {
         this.products = response.body as Product[];
-        let totalProducts : number = parseInt(response.headers.get('X-Total-Count')!);
+        let totalProducts: number = parseInt(response.headers.get('X-Total-Count')!);
         console.log("totalProducts", totalProducts);
         this.totalPages = Math.ceil(totalProducts / this.pageSize);
         console.log("totalPages", this.totalPages);
-       if (this.totalPages === 0) {
+        if (this.totalPages === 0) {
           this.totalPages = 1;
         }
       }
     )
-   }
+  }
 
   onCheckChange($event: Event, product: Product) {
     this.productsService.checkProduct(product).subscribe({
-        next :(updatedProduct : Product) => {
-           product.checked = !updatedProduct.checked;
-        }
-      })
+      next: (updatedProduct: Product) => {
+        product.checked = !updatedProduct.checked;
+      }
+    })
   }
 
   deleteProduct(id: number) {
     this.productsService.deleteProduct({id} as Product).subscribe(
       () => {
         // filter out the deleted product
- this.products = this.products.filter(product => product.id !== id);
+        this.products = this.products.filter(product => product.id !== id);
       }
     )
 
   }
 
 
-  searchProducts(){
+  searchProducts() {
     //console.log(page , size);
-   this.getProducts();
+    this.getProducts();
   }
 
 
@@ -75,4 +81,9 @@ export class ProductsComponent implements OnInit {
   }
 
   protected readonly Array = Array;
+
+  editProduct(id: number) {
+    this.router.navigateByUrl(`/editProduct/${id}`)
+
+  }
 }

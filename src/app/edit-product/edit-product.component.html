@@ -1,10 +1,17 @@
 <div class="p-3">
   <div class="card">
-    <div class="card-body">
+    <div class="card-header d-flex justify-content-between">
+      <h4>Edit product Form | id = {{productId}}</h4>
+      <div class="">
+        <button class="btn btn-primary  me-2" (click)="resetForm()">Reset</button>
+        <button class="btn btn-danger" (click)="back()">Back</button>
+      </div>
+    </div>
+    <div class="card-body" *ngIf="productFrom">
       <div class="row">
         <div class="col-md-6">
           {{productFrom.value | json}}
-          <form [formGroup]="productFrom" (ngSubmit)="saveProduct()">
+          <form [formGroup]="productFrom" (ngSubmit)="updateProduct()">
             <div class="mb-3">
               <label class="form-label">Name</label>
               <input type="text" class="form-control" formControlName="name"/>
