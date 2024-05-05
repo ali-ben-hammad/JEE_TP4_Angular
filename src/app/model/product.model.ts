@@ -5,3 +5,6 @@ export interface Product {
   price: number;
   checked: boolean;
 }
+
+
+

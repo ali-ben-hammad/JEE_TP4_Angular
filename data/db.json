@@ -1,9 +1,9 @@
 {
   "products": [
     {
-      "name": "Product 3 updated",
+      "name": "Product 1 updated",
       "price": "995",
-      "checked": true,
+      "checked": false,
       "id": "3"
     },
     {
@@ -22,7 +22,7 @@
       "id": "6",
       "name": "Product 6",
       "price": 600,
-      "checked": false
+      "checked": true
     },
     {
       "id": "7",

@@ -3,11 +3,11 @@
     <div class="card-header">
       <h4 class="card-title">Products</h4>
     </div>
-    <div class="card-body">
+    <div class="card-body" *ngIf="stateService.appState.totalPages > 0 ">
       <div class="card-body">
-        {{ keyword }}
+        {{ stateService.appState.keyword }}
         <div class="form-group col-md-6">
-          <input class="p-1" type="text" [(ngModel)]="keyword">
+          <input class="p-1" type="text" [(ngModel)]="stateService.appState.keyword">
           <button class="btn btn-outline-success ms-1"
                   (click)="searchProducts()">
             <i class="bi bi-search"></i>
@@ -25,7 +25,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let product of products">
+        <tr *ngFor="let product of stateService.appState.products">
           <td>{{ product.name }}</td>
           <td>{{ product.price }}</td>
           <td>
@@ -46,12 +46,12 @@
         </tbody>
       </table>
      <ul class="nav nav-pills">
-      <li *ngFor="let page of pages"
+      <li *ngFor="let page of [].constructor(this.stateService.appState.totalPages); let i = index"
            class="nav-item">
          <button class="nav-link"
-            [class.active]="currentPage === page"
-            (click)="changePage(page)">
-           {{ page + 1 }}
+            [class.active]="stateService.appState.currentPage === i + 1"
+            (click)="changePage(i + 1)">
+           {{ i + 1 }}
          </button>
       </li>
      </ul>

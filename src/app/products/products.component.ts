@@ -1,10 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {Product} from "../model/product.model";
-import {AsyncPipe, NgForOf} from "@angular/common";
+import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {ProductService} from "../services/product.service";
 import {FormsModule} from "@angular/forms";
 import {Route} from "@angular/router";
 import {Router} from "@angular/router";
+import {AppStateService} from "../services/app-state.service";
+
 @Component({
   selector: 'app-products',
   standalone: true,
@@ -12,43 +14,45 @@ import {Router} from "@angular/router";
     NgForOf,
     AsyncPipe,
     FormsModule,
+    NgIf,
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css',
 })
 export class ProductsComponent implements OnInit {
   constructor(
-      private productsService: ProductService,
-      private router: Router
-    ) {
+    private productsService: ProductService,
+    private router: Router,
+    public stateService: AppStateService
+  ) {
   }
 
-  public products: Array<Product> = [];
-  public keyword: string = '';
-  totalPages: number = 0;
-  currentPage: number = 0;
-  pages: number[] = new Array(this.totalPages);
-  pageSize: number = 3;
 
   ngOnInit(): void {
-    this.totalPages = 1;
     this.getProducts()
   }
 
   getProducts() {
-    this.productsService.getProducts(this.currentPage, this.pageSize, this.keyword).subscribe(
-      response => {
-        this.products = response.body as Product[];
-        let totalProducts: number = parseInt(response.headers.get('X-Total-Count')!);
-        console.log("totalProducts", totalProducts);
-        this.totalPages = Math.ceil(totalProducts / this.pageSize);
-        console.log("totalPages", this.totalPages);
-        if (this.totalPages === 0) {
-          this.totalPages = 1;
+    this.productsService.getProducts(
+      this.stateService.appState.currentPage,
+      this.stateService.appState.pageSize,
+      this.stateService.appState.keyword)
+      .subscribe(
+        response => {
+          this.stateService.appState.products = response.body as Product[];
+          let totalProducts: number = parseInt(response.headers.get('X-Total-Count')!);
+         // console.log("totalProducts", totalProducts);
+
+          this.stateService.appState.totalPages = Math.ceil(totalProducts / this.stateService.appState.pageSize);
+          this.stateService.appState.pages =  new Array(this.stateService.appState.totalPages).fill(0).map((x, i) => i);
+          console.log("totalPages", this.stateService.appState.totalPages);
+          if (this.stateService.appState.totalPages === 0) {
+            ++this.stateService.appState.totalPages
+          }
         }
-      }
-    )
+      )
   }
+
 
   onCheckChange($event: Event, product: Product) {
     this.productsService.checkProduct(product).subscribe({
@@ -62,7 +66,8 @@ export class ProductsComponent implements OnInit {
     this.productsService.deleteProduct({id} as Product).subscribe(
       () => {
         // filter out the deleted product
-        this.products = this.products.filter(product => product.id !== id);
+        this.stateService.appState.products =
+          this.stateService.appState.products.filter(product => product.id !== id);
       }
     )
 
@@ -76,7 +81,8 @@ export class ProductsComponent implements OnInit {
 
 
   changePage(page: any) {
-    this.currentPage = page;
+    console.log("page", page);
+    this.stateService.appState.currentPage = page;
     this.getProducts();
   }
 
