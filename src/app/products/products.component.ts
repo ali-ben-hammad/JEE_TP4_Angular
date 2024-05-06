@@ -6,6 +6,7 @@ import {FormsModule} from "@angular/forms";
 import {Route} from "@angular/router";
 import {Router} from "@angular/router";
 import {AppStateService} from "../services/app-state.service";
+import {SpinnerComponent} from "../spinner/spinner.component";
 
 @Component({
   selector: 'app-products',
@@ -15,6 +16,7 @@ import {AppStateService} from "../services/app-state.service";
     AsyncPipe,
     FormsModule,
     NgIf,
+    SpinnerComponent,
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.css',
@@ -41,10 +43,10 @@ export class ProductsComponent implements OnInit {
         response => {
           this.stateService.appState.products = response.body as Product[];
           let totalProducts: number = parseInt(response.headers.get('X-Total-Count')!);
-         // console.log("totalProducts", totalProducts);
+          console.log("totalProducts", totalProducts);
 
-          this.stateService.appState.totalPages = Math.ceil(totalProducts / this.stateService.appState.pageSize);
-          this.stateService.appState.pages =  new Array(this.stateService.appState.totalPages).fill(0).map((x, i) => i);
+          this.stateService.appState.totalPages = Math.floor(totalProducts / this.stateService.appState.pageSize);
+         // this.stateService.appState.pages =  new Array(this.stateService.appState.totalPages).fill(0).map((x, i) => i);
           console.log("totalPages", this.stateService.appState.totalPages);
           if (this.stateService.appState.totalPages === 0) {
             ++this.stateService.appState.totalPages

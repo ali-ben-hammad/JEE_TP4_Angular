@@ -3,13 +3,14 @@ import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {NgForOf} from "@angular/common";
 import {HttpClient} from "@angular/common/http";
 import {AppErrorsComponent} from "./app-errors/app-errors.component";
+import {SpinnerComponent} from "./spinner/spinner.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet, RouterLink,
-    NgForOf, RouterLinkActive, AppErrorsComponent,
+    NgForOf, RouterLinkActive, AppErrorsComponent, SpinnerComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

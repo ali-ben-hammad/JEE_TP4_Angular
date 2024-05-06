@@ -17,9 +17,12 @@ export class AppStateService {
     pages: [],
     pageSize: 3,
     loading: false,
-    status: 'ERROR',
+    status: 'LOADING',
     errorMessage: 'this is an error message'
 
+  }
+  public setAppState(state:any){
+    this.appState={...this.appState, ...state}
   }
 }
 

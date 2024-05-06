@@ -1,0 +1,19 @@
+import { Component } from '@angular/core';
+import {AppStateService} from "../services/app-state.service";
+import {NgIf} from "@angular/common";
+
+@Component({
+  selector: 'app-spinner',
+  standalone: true,
+  imports: [
+    NgIf
+  ],
+  templateUrl: './spinner.component.html',
+  styleUrl: './spinner.component.css'
+})
+export class SpinnerComponent {
+
+  constructor(public stateService: AppStateService) {
+  }
+
+}
